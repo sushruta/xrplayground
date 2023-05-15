@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>BabylonJS Hello World</title>
+
+    <style>
+      html, body {
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #renderCanvas {
+        width: 100%;
+        height: 100%;
+        touch-action: none;
+      }
+    </style>
+
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+  </head>
+
+  <body>
+    <canvas id="renderCanvas"></canvas>
+
+    <script>
+      const canvas = document.getElementId("renderCanvas");
+      const engine = new BABYLON.Engine(canvas, true);
+
+      const createScene = function() {
+          // creates a basic babylon scene object
+          const scene = new BABYLON.Scene(engine);
+          // creates a camera
+          const camera = new BABYLON.FreeCamera(
+              "camera1",
+              new BABYLON.vector(0, 5, -10),
+              scene
+          );
+          // target the camera at scene origin
+          camera.setTarget(BABYLON.Vector3.Zero());
+          // attach the camera to canvas
+          camera.attachControl(canvas, true);
+          // creates a hemispheric light
+          const light = new BABYLON.HemisphericLight(
+              "light",
+              new BABYLON.Vector3(0, 1, 0),
+              scene
+          );
+          light.intensity = 0.7;
+          // now add a sphere
+          const sphere = BABYLON.MeshBuilder.CreateSphere(
+              "sphere",
+              {diameter: 2, segments: 32},
+              scene
+          );
+          // translate the sphere above the xz-plane
+          sphere.position.y = 1;
+          // create a rectangle that looks like the ground
+          const ground = BABYLON.MeshBuilder.CreateGround(
+              "ground",
+              {width: 6, height: 6},
+              scene
+          );
+
+          // return scene object
+          return scene
+      };
+
+      const scene = createScene();
+      
+      // create a render loop
+      engine.runRenderLoop(function() {
+          scene.render();
+      });
+
+      // add an event listener for canvas or browser size changes
+      window.addEventListener(
+          "resize",
+          function() { engine.resize(); }
+      );
+    </script>
+  </body>
+</html>
+
